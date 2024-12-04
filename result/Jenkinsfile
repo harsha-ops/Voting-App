@@ -1,0 +1,45 @@
+pipeline{
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'harsha6798/voting-app-ci-images:latest'
+        
+    }
+
+    stages{
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/harsha-ops/Voting-App.git'
+            }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t ${DOCKER_IMAGE} .'
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker_cred', // Use your actual credentials ID
+                    usernameVariable: 'DOCKER_USERNAME', 
+                    passwordVariable: 'DOCKER_PASSWORD'
+            )]) {
+                sh '''
+                docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                '''
+            }
+
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps{
+                sh 'docker push ${DOCKER_IMAGE}'
+
+            }
+        }
+        }
+    }
+}
