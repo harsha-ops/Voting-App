@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: result-microservice-svc
+spec:
+  selector:
+    app: result
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 80

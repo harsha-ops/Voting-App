@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+  - name: test-pod
+    image: harsha6798/voting-app-worker-service-ci-image:7
