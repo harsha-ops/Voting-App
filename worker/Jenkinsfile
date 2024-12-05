@@ -26,7 +26,7 @@ pipeline {
         }
 
         stage('Deploy to k8s') {
-            steps{
+            steps {
                 sh """
                     sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/worker-microservice-deploy.yaml
                     """
