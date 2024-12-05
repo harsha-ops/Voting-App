@@ -29,10 +29,10 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/worker-microservice-deploy.yaml
+                    sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/worker-microservice-deploy.yml
                     '''
                     sh '''
-                    kubectl apply -f ./k8s/worker-microservice-deploy.yaml
+                    kubectl apply -f ./k8s/worker-microservice-deploy.yml
                     kubectl apply -f ./k8s/worker-microservice-svc.yml
                     '''
                 }
