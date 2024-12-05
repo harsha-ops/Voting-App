@@ -14,4 +14,4 @@ WORKDIR /out
 
 EXPOSE 80
 
-ENTRYPOINT [ "dotnet", "Worker.d11" ]
+ENTRYPOINT [ "dotnet", "Worker.dll" ]
