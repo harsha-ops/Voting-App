@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    environmet {
+        DOCKER_IMAGE = "harsha6798/voting-app-worker-service-ci-image:${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            git branch: 'main', url: 'https://github.com/harsha-ops/Voting-App.git'
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${DOCKER_IMAGE} ./worker/"
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh "docker push ${DOCKER_IMAGE}"
+            }
+        }
+    }
+}
