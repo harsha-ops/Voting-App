@@ -1,18 +1,23 @@
-FROM --platform=linux mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG TARGETPLATFORM
-ARG TARGETARCH
-ARG BUILDPLATFORM
-RUN echo "I am running on $BUILDPLATFORM, building for $TARGETPLATFORM"
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 
-WORKDIR /source
-COPY *.csproj .
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the project file(s) and restore dependencies
+COPY *.csproj ./
 RUN dotnet restore
 
+# Copy the entire application source code
 COPY . .
-RUN dotnet publish -c release -o /app --self-contained false --no-restore
 
-# app image
-FROM mcr.microsoft.com/dotnet/runtime:7.0
-WORKDIR /app
-COPY --from=build /app .
+# Build the application in release mode
+RUN dotnet publish -c release -o /out
+
+# Set the working directory to the published output
+WORKDIR /out
+
+# Expose port 80 for the application
+EXPOSE 80
+
+# Run the application using the .NET runtime
 ENTRYPOINT ["dotnet", "Worker.dll"]
