@@ -27,7 +27,8 @@ pipeline {
 
         stage('Deploy to k8s') {
             steps {
-                script {
+                withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
                     sh '''
                     sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/worker-microservice-deploy.yml
                     '''
@@ -36,6 +37,8 @@ pipeline {
                     kubectl apply -f ./k8s-manifest/worker-microservice-svc.yml
                     '''
                 }
+                }
+                
             }
         }
     }
