@@ -17,3 +17,16 @@ spec:
         image: harsha6798/voting-app-worker-service-ci-image:7
         ports:
         - containerPort: 80
+        env:
+        - name: POSTGRES_HOST
+          value: "postgres-svc"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: REDIS_HOST
+          value: "redis-svc"
+        - name: REDIS_PORT
+          value: "6379"
