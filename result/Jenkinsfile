@@ -41,5 +41,39 @@ pipeline {
 
             }
         }
+
+        stage('Test Kubernetes Connection') {
+            steps {
+                withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
+                        // Use the kubeconfig to test kubectl connectivity
+                        sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        echo "Testing Kubernetes Connection..."
+                        kubectl config view
+                        kubectl get nodes
+                        '''
+                    }
+                }
+            }
+        }
+
+
+
+        stage('Deploy to k8s') {
+            steps {
+                withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
+                    sh '''
+                    export KUBECONFIG=$KUBECONFIG_FILE
+                    sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/result-microservice-deploy.yml
+                    kubectl apply -f ./k8s-manifest/result-microservice-deploy.yml
+                    kubectl apply -f ./k8s-manifest/result-microservice-svc.yml
+                    '''
+                }
+                }
+                
+            }
+        }
     }
 }
