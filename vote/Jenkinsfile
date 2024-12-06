@@ -42,6 +42,23 @@ pipeline {
             }
         }
 
+        stage('Deploy Databases') {
+            steps {
+                withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
+                        sh '''
+                        
+                        echo "Deploying Databases..."
+                        kubectl apply -f ./k8s-manifest/redis-deploy.yml
+                        kubectl apply -f ./k8s-manifest/postgres-deploy.yml
+                        kubectl wait --for=condition=available --timeout=120s deployment/redis
+                        kubectl wait --for=condition=available --timeout=120s deployment/postgres
+                        '''
+                    }
+                }
+            }
+        }
+
 
 
         stage('Deploy to k8s') {
