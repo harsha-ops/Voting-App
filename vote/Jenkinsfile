@@ -49,8 +49,8 @@ pipeline {
                 withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     script {
                     sh '''
-                    export KUBECONFIG=$KUBECONFIG_FILE
                     sed -i 's|image: .*$|image: ${DOCKER_IMAGE}|' ./k8s-manifest/vote-microservice-deploy.yml
+                    export KUBECONFIG=$KUBECONFIG_FILE
                     kubectl apply -f ./k8s-manifest/vote-microservice-deploy.yml
                     kubectl apply -f ./k8s-manifest/vote-microservice-svc.yml
                     '''
