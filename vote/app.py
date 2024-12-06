@@ -18,7 +18,7 @@ app.logger.setLevel(logging.INFO)
 
 def get_redis():
     if not hasattr(g, 'redis'):
-        redis_host = os.getenv('REDIS_HOST', 'redis')  # Default to 'redis' if not set
+        redis_host = os.getenv('REDIS_HOST', 'redis-svc')  # Default to 'redis' if not set
         redis_port = int(os.getenv('REDIS_PORT', 6379))  # Default to 6379 if not set
         g.redis = Redis(host=redis_host, port=redis_port, db=0, socket_timeout=5)
     return g.redis
