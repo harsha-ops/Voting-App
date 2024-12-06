@@ -47,7 +47,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
                     script {
                         sh '''
-                        
+                        export KUBECONFIG=$KUBECONFIG_FILE
                         echo "Deploying Databases..."
                         kubectl apply -f ./k8s-manifest/redis-deploy.yml
                         kubectl apply -f ./k8s-manifest/postgres-deploy.yml
