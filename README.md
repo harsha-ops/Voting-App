@@ -1,50 +1,47 @@
-# Example Voting App
+# Voting App Microservices
 
-A simple distributed application running across multiple Docker containers.
+This is a simple microservice-based application for voting, built using Docker and deployed to a Kubernetes cluster (Minikube) using Jenkins CI/CD pipelines. The application consists of three microservices: **Vote**, **Worker**, and **Result**.
 
-## Getting started
+## Getting Started
 
-Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/).
+Follow the steps below to get started with building, deploying, and running the Voting App.
 
-This solution uses Python, Node.js, .NET, with Redis for messaging and Postgres for storage.
+### 1. Write Dockerfiles for Each Microservice
 
-Run in this directory to build and run the app:
+To containerize each of the microservices (Vote, Worker, and Result), you will need to create a Dockerfile for each service. Below are the key services:
 
-```shell
-docker compose up
-```
+- **Vote Microservice**: Written in Python language, Handles receiving votes from users and adding them to a queue.
+- **Worker Microservice**: Written in .Net, Processes the votes from the queue and updates the database.
+- **Result Microservice**: Written in JavaScript, Displays the voting results.
 
-The `vote` app will be running at [http://localhost:8080](http://localhost:8080), and the `results` will be at [http://localhost:8081](http://localhost:8081).
+Each microservice will have its own Dockerfile that defines the environment, dependencies, and how to run the service.
 
-Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
+### 2. Write Jenkins Pipelines for Each Microservice
 
-```shell
-docker swarm init
-```
+For each microservice, write a **Jenkinsfile** that defines the stages required for building, pushing, and deploying the Docker images.
 
-Once you have your swarm, in this directory run:
+The pipeline will consist of the following stages:
 
-```shell
-docker stack deploy --compose-file docker-stack.yml vote
-```
+- **Checkout the source code**: Pull the latest source code from GitHub.
+- **Build the Docker images**: Use the `Dockerfile` to build the Docker image for the respective microservice.
+- **Push the Docker images to Docker Hub**: Push the built Docker image to Docker Hub registry.
+- **Deploy the Docker image to Kubernetes (Minikube)**: Deploy the Docker image from Docker Hub to a running Minikube Kubernetes cluster.
 
-## Run the app in Kubernetes
+3. Create Jenkins Jobs for Each Microservice
+Once you have the Jenkinsfile ready for each microservice, create a separate Jenkins job for each microservice in the Jenkins dashboard:
 
-The folder k8s-specifications contains the YAML specifications of the Voting App's services.
+Create a new Pipeline job for each microservice.
+In the job configuration, link the job to the GitHub repository containing the source code.
+Set up the pipeline to point to the corresponding Jenkinsfile in the repository.
+Configure any necessary Jenkins credentials (e.g., for Docker Hub login).
+Trigger the pipeline to build, push, and deploy the Docker images.
 
-Run the following command to create the deployments and services. Note it will create these resources in your current namespace (`default` if you haven't changed it.)
+4. Set Up Kubernetes (Minikube) Cluster
+Ensure that you have a running Minikube Kubernetes cluster.
 
-```shell
-kubectl create -f k8s-specifications/
-```
+5. Deploy Microservices to Kubernetes
+After pushing the Docker images to Docker Hub, deploy each microservice to your Minikube Kubernetes cluster by applying the corresponding Kubernetes deployment and service YAML files.
 
-The `vote` web app is then available on port 31000 on each host of the cluster, the `result` web app is available on port 31001.
-
-To remove them, run:
-
-```shell
-kubectl delete -f k8s-specifications/
-```
 
 ## Architecture
 
@@ -56,10 +53,9 @@ kubectl delete -f k8s-specifications/
 * A [Postgres](https://hub.docker.com/_/postgres/) database backed by a Docker volume
 * A [Node.js](/result) web app which shows the results of the voting in real time
 
-## Notes
+### Key Notes:
+- Make sure your **Jenkins** server has the necessary plugins installed (e.g., Docker, Kubernetes, GitHub integration).
+- Configure **Docker Hub credentials** and **Kubernetes credentials** in Jenkins for smooth integration.
 
-The voting application only accepts one vote per client browser. It does not register additional votes if a vote has already been submitted from a client.
 
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
-deal with them in Docker at a basic level.
+
