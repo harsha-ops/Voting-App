@@ -25,6 +25,24 @@ pipeline {
             }
         }
 
+        stage('Test Kubernetes Connection') {
+            steps {
+                withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
+                    script {
+                        // Use the kubeconfig to test kubectl connectivity
+                        sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
+                        echo "Testing Kubernetes Connection..."
+                        kubectl config view
+                        kubectl get nodes
+                        '''
+                    }
+                }
+            }
+        }
+
+
+
         stage('Deploy to k8s') {
             steps {
                 withCredentials([file(credentialsId: 'minikubeconfig', variable: 'KUBECONFIG_FILE')]) {
