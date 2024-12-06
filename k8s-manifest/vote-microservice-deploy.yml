@@ -17,3 +17,8 @@ spec:
         image: harsha6798/voting-app-vote-service-ci-image:7
         ports:
         - containerPort: 80
+        env:
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
