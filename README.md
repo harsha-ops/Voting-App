@@ -27,7 +27,7 @@ The pipeline will consist of the following stages:
 - **Push the Docker images to Docker Hub**: Push the built Docker image to Docker Hub registry.
 - **Deploy the Docker image to Kubernetes (Minikube)**: Deploy the Docker image from Docker Hub to a running Minikube Kubernetes cluster.
 
-3. Create Jenkins Jobs for Each Microservice
+### 3. Create Jenkins Jobs for Each Microservice
 Once you have the Jenkinsfile ready for each microservice, create a separate Jenkins job for each microservice in the Jenkins dashboard:
 
 Create a new Pipeline job for each microservice.
@@ -36,10 +36,10 @@ Set up the pipeline to point to the corresponding Jenkinsfile in the repository.
 Configure any necessary Jenkins credentials (e.g., for Docker Hub login).
 Trigger the pipeline to build, push, and deploy the Docker images.
 
-4. Set Up Kubernetes (Minikube) Cluster
+### 4. Set Up Kubernetes (Minikube) Cluster
 Ensure that you have a running Minikube Kubernetes cluster.
 
-5. Deploy Microservices to Kubernetes
+### 5. Deploy Microservices to Kubernetes
 After pushing the Docker images to Docker Hub, deploy each microservice to your Minikube Kubernetes cluster by applying the corresponding Kubernetes deployment and service YAML files.
 
 
