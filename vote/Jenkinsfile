@@ -52,6 +52,7 @@ pipeline {
                         kubectl apply -f ./k8s-manifest/redis-deploy.yml
                         kubectl apply -f ./k8s-manifest/redis-svc.yml
                         kubectl apply -f ./k8s-manifest/postgres-deploy.yml
+                        kubectl apply -f ./k8s-manifest/postgres-svc.yml
                         '''
                     }
                 }
